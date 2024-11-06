@@ -40,14 +40,14 @@ GitHub: https://github.com/cyneric
 #### Option 1
 ##### Download and run the script in one step using CURL:
 ```bash
-curl -s https://raw.githubusercontent.com/cyneric/servarr-install/main/servarr-install-script.sh | sudo bash
+curl -s https://raw.githubusercontent.com/Cyneric/servarr-install-script/main/servarr-install-script.sh | sudo bash
 ```
 
 #### Option 2
 ##### Do it manually:
 1. Download the script:
 ```bash
-wget https://raw.githubusercontent.com/cyneric/servarr-install/main/servarr-install-script.sh
+wget https://raw.githubusercontent.com/Cyneric/servarr-install-script/main/servarr-install-script.sh
 ```
 
 1. Make it executable:
