@@ -1,0 +1,24 @@
+name: Installer checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        base: ['debian:12', 'debian:13', 'ubuntu:22.04', 'ubuntu:24.04']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build distribution test environment
+        run: docker build --build-arg BASE='${{ matrix.base }}' -t servarr-tests -f tests/Dockerfile .
+      - name: Syntax and regression tests
+        run: |
+          docker run --rm -v "$PWD:/work:ro" servarr-tests bash -n servarr-install-script.sh
+          docker run --rm -v "$PWD:/work:ro" servarr-tests bats tests/installer.bats
+      - name: ShellCheck
+        run: docker run --rm -v "$PWD:/work:ro" -w /work koalaman/shellcheck:v0.11.0 -x servarr-install-script.sh tests/*.sh
