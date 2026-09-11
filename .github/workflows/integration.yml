@@ -1,0 +1,39 @@
+name: Live installer integration
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Deployment mode
+        type: choice
+        options: [native, docker]
+        default: docker
+      app:
+        description: Native application (Docker always tests the complete stack)
+        type: choice
+        options: [all, lidarr, prowlarr, radarr, sonarr, whisparr, whisparr-v3, seerr]
+        default: all
+permissions:
+  contents: read
+jobs:
+  live:
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        base: ['debian:12', 'debian:13', 'ubuntu:22.04', 'ubuntu:24.04']
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fresh install and update in disposable systemd environment
+        env:
+          TEST_BASE: ${{ matrix.base }}
+          TEST_MODE: ${{ inputs.mode }}
+          TEST_APP: ${{ inputs.app }}
+        run: bash tests/run-integration.sh "$TEST_MODE" "$TEST_APP" "$TEST_BASE" 2>&1 | tee integration.log
+      - name: Upload validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-${{ strategy.job-index }}
+          path: integration.log
