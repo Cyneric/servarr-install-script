@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1 - 2026-11-22
+
+- Update native Seerr's bundled Node.js to [22.23.5](https://github.com/nodejs/node/releases/tag/v22.23.5) for security fixes. Rerun the installer and select Seerr in native mode to update an existing native installation.
+
 ## 4.0.0 - 2026-09-11
 
 - Choose native systemd services or a Docker Compose stack, then one, several, or all applications.
