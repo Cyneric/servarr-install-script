@@ -19,6 +19,7 @@ for piped in (False, True):
         os.execlp("bash", "bash", str(script))
     transcript = b""
     selected_mode = False
+    sent_empty = False
     canceled = False
     deadline = time.monotonic() + 20
     try:
@@ -37,7 +38,10 @@ for piped in (False, True):
                 if b"Deployment mode:" in transcript and not selected_mode:
                     os.write(fd, b"2\n")
                     selected_mode = True
-                if b"Applications: numbers" in transcript and not canceled:
+                if b"Applications: numbers" in transcript and not sent_empty:
+                    os.write(fd, b"\n")
+                    sent_empty = True
+                if transcript.count(b"Applications: numbers") == 2 and not canceled:
                     os.write(fd, b"q\n")
                     canceled = True
         else:
@@ -46,6 +50,7 @@ for piped in (False, True):
         _, status = os.waitpid(pid, 0)
         assert os.waitstatus_to_exitcode(status) == 0, transcript
         assert canceled and b"bad array subscript" not in transcript, transcript
-        print("PASS: terminal cancellation", "piped" if piped else "downloaded")
+        assert b"Invalid selection" in transcript, transcript
+        print("PASS: terminal empty input and cancellation", "piped" if piped else "downloaded")
     finally:
         os.close(fd)

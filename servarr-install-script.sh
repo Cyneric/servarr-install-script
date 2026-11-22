@@ -4,10 +4,10 @@
 # Deliberately self-contained: download this file, then run sudo bash ./servarr-install-script.sh.
 set -Eeuo pipefail
 
-readonly SCRIPT_VERSION=4.0.0
-readonly SCRIPT_DATE=2026-09-11
+readonly SCRIPT_VERSION=4.0.1
+readonly SCRIPT_DATE=2026-11-22
 readonly SCRIPT_URL=https://github.com/Cyneric/servarr-install-script
-readonly NODE_VERSION=22.23.2 PNPM_VERSION=10.24.0
+readonly NODE_VERSION=22.23.5 PNPM_VERSION=10.24.0
 APP_IDS=(lidarr prowlarr radarr sonarr whisparr whisparr-v3 seerr)
 declare -gA LABEL=([lidarr]=Lidarr [prowlarr]=Prowlarr [radarr]=Radarr [sonarr]=Sonarr [whisparr]='Whisparr v2' [whisparr-v3]='Whisparr v3' [seerr]=Seerr)
 declare -gA BINARY=([lidarr]=Lidarr [prowlarr]=Prowlarr [radarr]=Radarr [sonarr]=Sonarr [whisparr]=Whisparr [whisparr-v3]=Whisparr [seerr]=Seerr)
